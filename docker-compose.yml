@@ -1,8 +1,21 @@
 services:
+  # Proxy en lecture seule vers le socket Docker : Traefik ne voit que la liste des conteneurs
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    environment:
+      - CONTAINERS=1
+      - POST=0
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+    networks:
+      - socket
+
   traefik:
-    image: traefik:v2.11
+    image: traefik:v3.7
     command:
       - "--providers.docker=true"
+      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       # redirection HTTP -> HTTPS (le challenge ACME reste traité avant)
@@ -18,20 +31,22 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik/acme.json:/letsencrypt/acme.json"
+    depends_on:
+      - socket-proxy
     restart: unless-stopped
     networks:
       - web
+      - socket
 
   site:
     image: nginx:latest
     volumes:
-      - "./site:/usr/share/nginx/html"
+      - "./site:/usr/share/nginx/html:ro"
     labels:
       - "traefik.enable=true"
-      # domaine
-      - "traefik.http.routers.site.rule=Host(`nahugondev.fr`, `www.nahugondev.fr`)"
+      # domaine (Traefik v3 : un Host() par domaine)
+      - "traefik.http.routers.site.rule=Host(`nahugondev.fr`) || Host(`www.nahugondev.fr`)"
       # https
       - "traefik.http.routers.site.entrypoints=websecure"
       - "traefik.http.routers.site.tls.certresolver=letsencrypt"
@@ -43,3 +58,6 @@ services:
 
 networks:
   web:
+  # réseau interne : pas d'accès Internet, seul Traefik y parle au proxy
+  socket:
+    internal: true
