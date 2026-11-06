@@ -1,0 +1,45 @@
+services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      # redirection HTTP -> HTTPS (le challenge ACME reste traité avant)
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      # letsencrypt
+      - "--certificatesresolvers.letsencrypt.acme.email=nahugondev@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik/acme.json:/letsencrypt/acme.json"
+    restart: unless-stopped
+    networks:
+      - web
+
+  site:
+    image: nginx:latest
+    volumes:
+      - "./site:/usr/share/nginx/html"
+    labels:
+      - "traefik.enable=true"
+      # domaine
+      - "traefik.http.routers.site.rule=Host(`nahugondev.fr`, `www.nahugondev.fr`)"
+      # https
+      - "traefik.http.routers.site.entrypoints=websecure"
+      - "traefik.http.routers.site.tls.certresolver=letsencrypt"
+      # port du container
+      - "traefik.http.services.site.loadbalancer.server.port=80"
+    restart: unless-stopped
+    networks:
+      - web
+
+networks:
+  web:

@@ -1,0 +1,6 @@
+# Certificats et clés privées Let's Encrypt
+traefik/acme.json*
+# Ancien dossier créé par erreur par Docker (vide, appartient à root)
+.traefik/
+# Sauvegardes locales
+*.bak-*
