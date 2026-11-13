@@ -43,6 +43,7 @@ services:
     image: nginx:latest
     volumes:
       - "./site:/usr/share/nginx/html:ro"
+      - "./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"
     labels:
       - "traefik.enable=true"
       # domaine (Traefik v3 : un Host() par domaine)
