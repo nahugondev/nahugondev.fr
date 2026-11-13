@@ -4,3 +4,5 @@ traefik/acme.json*
 .traefik/
 # Sauvegardes locales
 *.bak-*
+# Maquettes locales
+maquette/

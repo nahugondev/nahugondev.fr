@@ -25,6 +25,14 @@
 
   <div class="container">
 
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a class="brand" href="/">Nathan Hugon</a>
+      <ul>
+        <li><a href="/" aria-current="page">Accueil</a></li>
+        <li><a href="/projets/">Projets</a></li>
+      </ul>
+    </nav>
+
     <header class="site-header">
       <div>
         <p class="label">En recherche d'emploi · Bretagne, France</p>
@@ -103,12 +111,15 @@
 
       <section aria-labelledby="projets">
         <div class="section-header">
-          <h2 id="projets">Mes Projets</h2>
+          <h2 id="projets">Projets phares</h2>
         </div>
         <div class="projects-grid">
 
           <article class="card project-card">
-            <h3 class="project-title">NocoDB</h3>
+            <div class="project-heading">
+              <h3 class="project-title">NocoDB</h3>
+              <span class="badge">DevOps</span>
+            </div>
             <p class="project-desc">Projet d'automatisation de déploiement complet : application NocoDB.</p>
             <ul class="tags">
               <li class="tag">Docker</li>
@@ -125,32 +136,22 @@
           </article>
 
           <article class="card project-card">
-            <h3 class="project-title">Media Server</h3>
-            <p class="project-desc">Projet de serveur médias personnel.</p>
+            <div class="project-heading">
+              <h3 class="project-title">Escape Game VR</h3>
+              <span class="badge">Unity</span>
+            </div>
+            <p class="project-desc">R&amp;D et développement d'un escape game en réalité virtuelle couplé à de l'électronique.</p>
             <ul class="tags">
-              <li class="tag">Docker Compose</li>
+              <li class="tag">Unity</li>
+              <li class="tag">C#</li>
+              <li class="tag">VR</li>
+              <li class="tag">Électronique</li>
             </ul>
-            <a href="https://github.com/nahugondev/media-server" class="project-link" target="_blank" rel="noopener noreferrer">
-              <span aria-hidden="true">⌥</span> Voir le repo<span class="visually-hidden"> Media Server (nouvel onglet)</span>
-            </a>
-          </article>
-
-          <article class="card project-card">
-            <h3 class="project-title">Gitea (en cours)</h3>
-            <p class="project-desc">Projet d'automatisation de déploiement de Gitea. Objectifs : Approfondir K3S et GitLab CI/CD</p>
-            <ul class="tags">
-              <li class="tag">Docker</li>
-              <li class="tag">Terraform</li>
-              <li class="tag">Ansible</li>
-              <li class="tag">GitLab CI/CD</li>
-              <li class="tag">K3S</li>
-            </ul>
-            <a href="https://gitlab.com/nahugondev/gitea-deploy" class="project-link" target="_blank" rel="noopener noreferrer">
-              <span aria-hidden="true">⌥</span> Voir le repo<span class="visually-hidden"> Gitea (nouvel onglet)</span>
-            </a>
+            <p class="project-private">Projet professionnel, non public</p>
           </article>
 
         </div>
+        <a class="project-link see-all" href="/projets/"><span aria-hidden="true">→</span> Voir tous mes projets</a>
       </section>
 
       <section aria-labelledby="experiences">
